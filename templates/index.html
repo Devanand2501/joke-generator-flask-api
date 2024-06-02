@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Joke Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 50px;
+        max-width: 800px;
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        margin-bottom: 30px;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        color: #343a40;
+      }
+      label {
+        font-weight: bold;
+        color: #495057;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .joke-box {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+      }
+      .error-box {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f8d7da;
+        border-radius: 5px;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">Joke Generator</h1>
+      <form method="POST" action="/">
+        <div class="form-group">
+          <label>Select category / categories:</label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="category" value="Programming" {% if 'Programming' in categories %}checked{% endif %}>
+            <label class="form-check-label">Programming</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="category" value="Miscellaneous" {% if 'Miscellaneous' in categories %}checked{% endif %}>
+            <label class="form-check-label">Miscellaneous</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="category" value="Dark" {% if 'Dark' in categories %}checked{% endif %}>
+            <label class="form-check-label">Dark</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="category" value="Pun" {% if 'Pun' in categories %}checked{% endif %}>
+            <label class="form-check-label">Pun</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="category" value="Spooky" {% if 'Spooky' in categories %}checked{% endif %}>
+            <label class="form-check-label">Spooky</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="category" value="Christmas" {% if 'Christmas' in categories %}checked{% endif %}>
+            <label class="form-check-label">Christmas</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Select flags to blacklist:</label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="blacklist_flags" value="nsfw" {% if 'nsfw' in blacklist_flags %}checked{% endif %}>
+            <label class="form-check-label">nsfw</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="blacklist_flags" value="religious" {% if 'religious' in blacklist_flags %}checked{% endif %}>
+            <label class="form-check-label">religious</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="blacklist_flags" value="political" {% if 'political' in blacklist_flags %}checked{% endif %}>
+            <label class="form-check-label">political</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="blacklist_flags" value="racist" {% if 'racist' in blacklist_flags %}checked{% endif %}>
+            <label class="form-check-label">racist</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="blacklist_flags" value="sexist" {% if 'sexist' in blacklist_flags %}checked{% endif %}>
+            <label class="form-check-label">sexist</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="blacklist_flags" value="explicit" {% if 'explicit' in blacklist_flags %}checked{% endif %}>
+            <label class="form-check-label">explicit</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Select at least one joke type:</label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="joke_type" value="single" {% if joke_type == 'single' %}checked{% endif %}>
+            <label class="form-check-label">Single</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="joke_type" value="twopart" {% if joke_type == 'twopart' %}checked{% endif %}>
+            <label class="form-check-label">Twopart</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Number of jokes:</label>
+          <input type="number" name="num_jokes" value="{{ num_jokes }}" min="1" max="10" class="form-control" style="width: 100px;">
+        </div>
+        <button type="submit" class="btn btn-primary">Get Joke</button>
+      </form>
+      {% if joke %}
+        <div class="joke-box">
+          <h3>Here's your joke:</h3>
+          {% for j in joke %}
+            {% if j.type == 'single' %}
+              <p>{{ j.joke }}</p><hr>
+            {% elif j.type == 'twopart' %}
+              <p><strong>Setup:</strong> {{ j.setup }}</p>
+              <p><strong>Delivery:</strong> {{ j.delivery }}</p><hr>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% elif error %}
+        <div class="error-box">
+          <h3>Error:</h3>
+          <p>{{ error }}</p>
+        </div>
+      {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
