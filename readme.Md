@@ -12,7 +12,7 @@ This is a simple web application that generates jokes based on selected categori
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/joke-generator.git
+    https://github.com/Devanand2501/joke-generator-flask-api.git
     ```
 
 2. Navigate to the project directory:
@@ -24,7 +24,7 @@ This is a simple web application that generates jokes based on selected categori
 3. Build the Docker image:
 
     ```bash
-    docker build -t joke-generator .
+    docker build -t joke-generator:0.0.1.RELEASE .
     ```
 
 ## Usage
@@ -32,7 +32,7 @@ This is a simple web application that generates jokes based on selected categori
 1. Run the Docker container:
 
     ```bash
-    docker run -d -p 5000:5000 joke-generator
+    docker run -d -p 5000:5000 joke-generator:0.0.1.RELEASE
     ```
 
 2. Open your web browser and navigate to [http://localhost:5000](http://localhost:5000).
