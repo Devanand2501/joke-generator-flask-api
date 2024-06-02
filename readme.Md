@@ -1,6 +1,3 @@
-Certainly! Here's the updated section in the README.md file to mention the seamless integration of the REST API with Flask:
-
-```markdown
 # Joke Generator
 
 This is a simple web application that generates jokes based on selected categories and blacklist flags. It uses the JokeAPI to fetch jokes and Flask to serve the web interface, with seamless integration of a REST API.
